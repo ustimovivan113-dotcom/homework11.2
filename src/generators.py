@@ -8,5 +8,5 @@ def filter_by_currency(transactions: list[dict], currency: str) -> Iterator[Dict
     '''
     result = (transaction for transaction in transactions
               if transaction.get('operationAmount', {}).get('currency', {}).get('code') == currency)
-    return result
 
+    return result
