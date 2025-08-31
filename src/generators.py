@@ -1,5 +1,4 @@
-from typing import Dict, List, Iterator
-
+from typing import Dict, Iterator, List
 
 
 def filter_by_currency(transactions: list[dict], currency: str) -> Iterator[Dict]:
@@ -7,10 +6,14 @@ def filter_by_currency(transactions: list[dict], currency: str) -> Iterator[Dict
     Фукнция для возвращения итератора, которая поочередно
     выдаёт транзакции, где валюта операции соответсвует заданной
     """
-    result = (transaction for transaction in transactions
-              if transaction.get('operationAmount', {}).get('currency', {}).get('code') == currency)
+    result = (
+        transaction
+        for transaction in transactions
+        if transaction.get("operationAmount", {}).get("currency", {}).get("code") == currency
+    )
 
     return result
+
 
 def transaction_descriptions(transactions: list[dict]) -> Iterator:
     """
@@ -18,7 +21,7 @@ def transaction_descriptions(transactions: list[dict]) -> Iterator:
     и возвращает описание каждой операции по очереди
     """
     for transaction in transactions:
-        description = transaction.get('description')
+        description = transaction.get("description")
         yield description
 
 
@@ -40,4 +43,3 @@ def card_number_generator(start: int = 1, end: int = 9999999999999999) -> Iterat
         formatted = f"{card_number[:4]} {card_number[4:8]} {card_number[8:12]} {card_number[12:]}"
         yield formatted
         current += 1
-
