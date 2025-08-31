@@ -1,6 +1,6 @@
 import pytest
 from typing import Dict, List, Iterator
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
 
 @pytest.fixture
@@ -164,3 +164,105 @@ def test_parametrized_currency_filtering(sample_transactions, currency, expected
     assert len(result) == expected_count
     if expected_count > 0:
         assert all(t['operationAmount']['currency']['code'] == currency for t in result)
+
+def test_transaction_descriptions(sample_transactions):
+    """Проверяет, что функция возвращает корректные описания."""
+    # Act
+    result = list(transaction_descriptions(sample_transactions))
+
+    # Assert
+    assert result == ['Перевод организации', 'Перевод со счета на счет',
+                      'Перевод со счета на счет', 'Перевод с карты на карту']
+
+def test_empty_transaction_descriptions():
+    """Тестирует работу с пустым списком транзакций."""
+    # Act
+    result = list(transaction_descriptions(([])))
+
+    # Assert
+    assert  result == []
+    assert  len(result) == 0
+
+def test_single_transaction_descriptions():
+    """Тестирует работу с одной транзакцией."""
+    transactions = [
+        {
+            "id": 1,
+            "description": "Единственная транзакция",
+            "amount": 100
+        }
+    ]
+
+    # Act
+    result = list(transaction_descriptions(transactions))
+
+    # Assert
+    assert len(result) == 1
+    assert  result == ["Единственная транзакция"]
+
+
+def test_card_number_generator():
+    """Тест генерации номеров."""
+    #Act
+    generate = card_number_generator(1, 5)
+    result = list(generate)
+
+    #Expected
+    expected = [
+        "0000 0000 0000 0001",
+        "0000 0000 0000 0002",
+        "0000 0000 0000 0003",
+        "0000 0000 0000 0004",
+        "0000 0000 0000 0005"
+    ]
+    assert result == expected
+
+def test_extreme_values_card_number_generator():
+    """Тест генерации крайних значений"""
+    #Act
+    generate = card_number_generator(9999999999999995, 9999999999999999)
+    result = list(generate)
+
+    #Expected
+    expected = [
+        "9999 9999 9999 9995",
+        "9999 9999 9999 9996",
+        "9999 9999 9999 9997",
+        "9999 9999 9999 9998",
+        "9999 9999 9999 9999"
+    ]
+    assert result == expected
+
+def test_wrong_card_number_generator():
+    """Тест генерации номеров c некоректными значениями."""
+    with pytest.raises(ValueError):
+        list(card_number_generator(10, 5))
+
+def test_invalid_start_card_number_generator():
+    """Тест некорректного начального значения."""
+    with pytest.raises(ValueError):
+        list(card_number_generator(0, 5))
+
+def test_invalid_end_card_number_generator():
+    """Тест некорректного конечного значения."""
+    with pytest.raises(ValueError):
+        list(card_number_generator(1, 10000000000000000))
+
+def test_default_card_number_generator():
+    """Тест работы с параметрами по умолчанию."""
+    # Act - получаем первые 3 номера из полного диапазона
+    gen = card_number_generator()
+    first_three = [next(gen) for _ in range(3)]
+
+    # Assert
+    expected = [
+        "0000 0000 0000 0001",
+        "0000 0000 0000 0002",
+        "0000 0000 0000 0003"
+    ]
+    assert first_three == expected
+
+
+
+
+
