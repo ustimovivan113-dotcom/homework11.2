@@ -25,6 +25,12 @@ git clone https://github.com/ZloyKINDER/Educational_Bank.git
 
 6. sort_by_date - Сортирует список словарей по значению ключа 'date'.
 
+7. filter_by_currency - Возвращает итератор, который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD)..
+
+8. transaction_descriptions - Принимает список словарей с транзакциями и возвращает описание каждой операции по очереди.
+
+9. card_number_generator - Генерирует номер карты в формате XXXX XXXX XXXX XXXX в заданном диапозоне.
+
 ## Примеры использования:
 
 1. get_mask_card_number
@@ -102,6 +108,70 @@ print(sort_by_date(data_list, False))
 # Выход функции, если вторым аргументов передано 'False'
 [{'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}, {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}, {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}, {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
 ```
+
+7. filter_by_currency.
+```
+usd_transactions = filter_by_currency(transactions, "USD")
+for _ in range(2):
+    print(next(usd_transactions))
+
+>>> {
+          "id": 939719570,
+          "state": "EXECUTED",
+          "date": "2018-06-30T02:08:58.425572",
+          "operationAmount": {
+              "amount": "9824.07",
+              "currency": {
+                  "name": "USD",
+                  "code": "USD"
+              }
+          },
+          "description": "Перевод организации",
+          "from": "Счет 75106830613657916952",
+          "to": "Счет 11776614605963066702"
+      }
+      {
+              "id": 142264268,
+              "state": "EXECUTED",
+              "date": "2019-04-04T23:20:05.206878",
+              "operationAmount": {
+                  "amount": "79114.93",
+                  "currency": {
+                      "name": "USD",
+                      "code": "USD"
+                  }
+              },
+              "description": "Перевод со счета на счет",
+              "from": "Счет 19708645243227258542",
+              "to": "Счет 75651667383060284188"
+       }
+```
+
+8. transaction_descriptions.
+```
+descriptions = transaction_descriptions(transactions)
+for _ in range(5):
+    print(next(descriptions))
+
+>>> Перевод организации
+    Перевод со счета на счет
+    Перевод со счета на счет
+    Перевод с карты на карту
+    Перевод организации
+```
+
+9. card_number_generator.
+```
+for card_number in card_number_generator(1, 5):
+    print(card_number)
+
+>>> 0000 0000 0000 0001
+    0000 0000 0000 0002
+    0000 0000 0000 0003
+    0000 0000 0000 0004
+    0000 0000 0000 0005
+```
+
 ## Реализованны модули с тестированием:
 
 1. test_mask - Тестирование для модуля masks.
@@ -110,3 +180,4 @@ print(sort_by_date(data_list, False))
 
 3. test_processing - Тестировани для модуля processing.
 
+4. test_generators - Тестировани для модуля generators.
