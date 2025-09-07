@@ -1,5 +1,6 @@
 from typing import Callable, Optional, Any
 from time import time
+import functools
 import datetime
 
 
@@ -11,6 +12,7 @@ def log(filename: Optional[str] = None) -> Callable:
         """
         Обертка-декоратора функции.
         """
+        @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Any:
             """
             Обертка, выполнения функции и отлавливания исключений.
@@ -52,7 +54,7 @@ def log(filename: Optional[str] = None) -> Callable:
                 error_message = (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - "
                                 f"{func.__name__} завершилась с ошибкой: {type(e).__name__}: {e}. "
                                 f"Args: {args}, Kwargs: {kwargs}, "
-                                f"Время выолнения: {end_time - start_time:.4f}с")
+                                f"Время выполнения: {end_time - start_time:.4f}с")
 
                 if filename:
                     with open(filename, "a", encoding="utf-8") as f:
