@@ -1,19 +1,21 @@
-from typing import Callable, Optional, Any
-from time import time
-import functools
 import datetime
+import functools
+from time import time
+from typing import Any, Callable, Optional
 
 
 def log(filename: Optional[str] = None) -> Callable:
     """
     Декоратор для логирования вызовов функции
     """
+
     def decorator(func: Callable) -> Callable:
         """
         Обертка-декоратора функции.
         """
+
         @functools.wraps(func)
-        def wrapper(*args, **kwargs) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             """
             Обертка, выполнения функции и отлавливания исключений.
             """
@@ -35,13 +37,15 @@ def log(filename: Optional[str] = None) -> Callable:
                 end_time = time()
 
                 # Логируем успешное завершение
-                success_message = (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - "
-                                   f"{func.__name__} завершилась успешно. "
-                                   f"Результат: {result}, "
-                                   f"Время выполнения: {end_time - start_time:.4f}с")
+                success_message = (
+                    f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - "
+                    f"{func.__name__} завершилась успешно. "
+                    f"Результат: {result}, "
+                    f"Время выполнения: {end_time - start_time:.4f}с"
+                )
                 if filename:
                     with open(filename, "a", encoding="utf-8") as f:
-                        f.write(success_message + '\n')
+                        f.write(success_message + "\n")
                 else:
                     print(success_message)
 
@@ -50,15 +54,17 @@ def log(filename: Optional[str] = None) -> Callable:
             except Exception as e:
                 end_time = time()
 
-                #Логируем ошибку
-                error_message = (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - "
-                                f"{func.__name__} завершилась с ошибкой: {type(e).__name__}: {e}. "
-                                f"Args: {args}, Kwargs: {kwargs}, "
-                                f"Время выполнения: {end_time - start_time:.4f}с")
+                # Логируем ошибку
+                error_message = (
+                    f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - "
+                    f"{func.__name__} завершилась с ошибкой: {type(e).__name__}: {e}. "
+                    f"Args: {args}, Kwargs: {kwargs}, "
+                    f"Время выполнения: {end_time - start_time:.4f}с"
+                )
 
                 if filename:
                     with open(filename, "a", encoding="utf-8") as f:
-                        f.write(error_message + '\n')
+                        f.write(error_message + "\n")
                 else:
                     print(error_message)
 

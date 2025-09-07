@@ -1,10 +1,12 @@
 import os
-import pytest
-from src.decorators import log
 
+import pytest
+
+from src.decorators import log
 
 # Имя файла для тестов логирования в файл
 LOG_FILENAME = "test_log.txt"
+
 
 @pytest.fixture(autouse=True)
 def teardown_method():
@@ -18,6 +20,7 @@ def teardown_method():
 
 def test_log_to_console_success(capsys):
     """Тест логирования успешного выполнения в консоль"""
+
     @log()
     def add(a, b):
         return a + b
@@ -35,9 +38,9 @@ def test_log_to_console_success(capsys):
     assert "Время выполнения:" in output
 
 
-
 def test_log_to_file_success():
     """Тест логирования успешного выполнения в файл"""
+
     @log(filename=LOG_FILENAME)
     def add(a, b):
         return a + b
@@ -60,6 +63,7 @@ def test_log_to_file_success():
 
 def test_log_to_console_error(capsys):
     """Тест логирования с ошибкой в консоль"""
+
     @log()
     def division(a, b):
         return a / b
@@ -80,6 +84,7 @@ def test_log_to_console_error(capsys):
 
 def test_log_to_file_error():
     """Тест логирования с ошибкой в файл"""
+
     @log(filename=LOG_FILENAME)
     def division(a, b):
         return a / b
@@ -115,5 +120,3 @@ def test_log_none_result(capsys):
     output = captured.out
 
     assert "Результат: None" in output
-
-
