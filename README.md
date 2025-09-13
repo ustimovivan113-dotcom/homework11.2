@@ -171,6 +171,16 @@ for card_number in card_number_generator(1, 5):
     0000 0000 0000 0004
     0000 0000 0000 0005
 ```
+## Реализованые декораторы:
+1. log - автоматически регистрирует детали выполнения функций, такие как время вызова, имя функции, передаваемые аргументы, результат выполнения и информацию об ошибках.
+```
+# Пример использования декоратора
+@log(filename="mylog.txt")
+def my_function(x, y):
+    return x + y
+
+my_function(1, 2)
+```
 
 ## Реализованны модули с тестированием:
 
@@ -181,3 +191,5 @@ for card_number in card_number_generator(1, 5):
 3. test_processing - Тестировани для модуля processing.
 
 4. test_generators - Тестировани для модуля generators.
+
+5. test_decorators - Тестирование для модуля decorators.
