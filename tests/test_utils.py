@@ -1,7 +1,6 @@
 import json
-import os
 import pytest
-from unittest.mock import mock_open, patch, MagicMock
+from unittest.mock import mock_open, patch
 from src.utils import load_json_data
 
 
