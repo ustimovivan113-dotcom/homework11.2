@@ -193,3 +193,12 @@ my_function(1, 2)
 4. test_generators - Тестировани для модуля generators.
 
 5. test_decorators - Тестирование для модуля decorators.
+
+# Пример использования декоратора
+@log(filename="mylog.txt")  # В файл
+def my_function(x, y):
+    return x + y
+
+@log()  # В консоль
+def another_function():
+    pass
