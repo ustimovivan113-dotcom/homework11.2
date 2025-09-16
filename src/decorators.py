@@ -1,11 +1,14 @@
 import functools
 import datetime
+from typing import Callable, TypeVar, Any
+
+T = TypeVar('T')
 
 
-def log(filename=None):
-    def decorator(func):
+def log(filename: str | None = None) -> Callable[[Callable[..., T]], Callable[..., T]]:
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             log_message = f"{timestamp} - Function '{func.__name__}' called with args: {args}, kwargs: {kwargs}"
 
@@ -25,8 +28,7 @@ def log(filename=None):
                 else:
                     print(log_message)
 
-            if success:
-                return result
+            return result if success else None  # type: ignore
 
         return wrapper
 

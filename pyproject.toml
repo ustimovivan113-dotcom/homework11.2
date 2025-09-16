@@ -7,6 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
+requests = "^2.32.5"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.lint.dependencies]
@@ -17,8 +19,11 @@ mypy = "^1.17.1"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.4.1"
+pytest = "^8.3.2"
 pytest-cov = "^6.2.1"
+pytest-mock = "^3.14.0"
+mypy = "^1.18.1"
+types-requests = "^2.32.0.20250602"
 
 [build-system]
 requires = ["poetry-core"]
