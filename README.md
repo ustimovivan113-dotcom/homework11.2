@@ -202,3 +202,26 @@ def my_function(x, y):
 @log()  # В консоль
 def another_function():
     pass
+
+## Новые функции:
+1. load_transactions - Загружает транзакции из JSON.
+# Пример
+from utils import load_transactions
+transactions = load_transactions('data/operations.json')
+
+## Новые функции:
+1. load_transactions (utils.py) - Загружает транзакции из JSON.
+2. convert_to_rub (external_api.py) - Конвертирует сумму транзакции в RUB через API.
+3. Декоратор log обновлён: поддерживает filename, логирует тип ошибки и параметры.
+
+## Установка:
+- Убедитесь, что .env содержит EXCHANGE_API_KEY.
+- Тесты используют pytest и pytest-mock.
+- Код типизирован, проверен mypy.
+
+## Примеры:
+```python
+from utils import load_transactions
+from external_api import convert_to_rub
+transactions = load_transactions('data/operations.json')
+print(convert_to_rub(transactions[0]))
