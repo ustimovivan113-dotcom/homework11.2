@@ -1,5 +1,5 @@
 from masks import get_mask_card_number, get_mask_account, mask_account_card
-from utils import get_date  # Если utils.py есть
+from utils import get_date
 
 # Тест masks
 print(get_mask_card_number('7000792289606361'))
