@@ -1,0 +1,4 @@
+[
+    {"id": 1, "operationAmount": {"amount": "100.00", "currency": {"code": "USD"}}},
+    {"id": 2, "operationAmount": {"amount": "200.00", "currency": {"code": "RUB"}}}
+]
