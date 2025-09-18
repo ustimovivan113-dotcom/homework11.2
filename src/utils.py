@@ -1,16 +1,20 @@
-import json
-from typing import List, Dict, Any
+import logging
 
-def load_transactions(file_path: str) -> List[Dict[str, Any]]:
-    """
-    Загружает транзакции из JSON-файла.
-    Возвращает пустой список, если файл не найден, пустой или не содержит список.
-    """
+logging.basicConfig(
+    filename='logs/utils.log',
+    filemode='w',
+    format='%(asctime)s [%(name)s] %(levelname)s: %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger('utils')
+
+def get_date(date_str: str) -> str:
+    logger.info(f"Вызвана функция get_date с аргументом: {date_str}")
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            if isinstance(data, list):
-                return data
-            return []
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
+        formatted_date = date_str.split('T')[0].split('-')[::-1]
+        formatted_date = '.'.join(formatted_date)
+        logger.info(f"Результат: {formatted_date}")
+        return formatted_date
+    except Exception as e:
+        logger.error(f"Ошибка в get_date: {str(e)}")
+        raise
