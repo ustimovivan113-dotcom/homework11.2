@@ -1,19 +1,23 @@
-import datetime
 import logging
+from pathlib import Path
+
+MODULE_DIR = Path(__file__).resolve().parent
+LOG_DIR = MODULE_DIR.parent / "logs"
+LOG_DIR.mkdir(exist_ok=True)
 
 logger = logging.getLogger("masks")
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("../logs/masks.log", mode="w")
+log_file = LOG_DIR / "masks.log"
+file_handler = logging.FileHandler(log_file, mode="w")
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(funcName)s: %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
+
 
 def get_mask_card_number(card_number: int) -> str:
     """
     Возвращает маску номера карты в формате XXXX XX** **** XXXX
     """
-
-    today = datetime.datetime.now()
 
     if isinstance(card_number, str):
         logger.warning(f"Card number: {card_number} is stroke")
@@ -44,4 +48,3 @@ def get_mask_account(account_number: int) -> str:
     logger.info(f"A mask is created for the account number. {account_number}")
     mask_account = "**" + account_number_str[-4:]
     return mask_account
-
