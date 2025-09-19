@@ -31,6 +31,10 @@ git clone https://github.com/ZloyKINDER/Educational_Bank.git
 
 9. card_number_generator - Генерирует номер карты в формате XXXX XXXX XXXX XXXX в заданном диапозоне.
 
+10. read_transactions_csv - Cчитывания финансовые операций из CSV и выдает список словарей с транзакциями.
+
+11. read_transactions_xlsx - Cчитывания финансовые операций из XLSX и выдает список словарей с транзакциями.
+
 ## Примеры использования:
 
 1. get_mask_card_number
@@ -170,6 +174,22 @@ for card_number in card_number_generator(1, 5):
     0000 0000 0000 0003
     0000 0000 0000 0004
     0000 0000 0000 0005
+```
+
+10. read_transactions_csv.
+```
+ transactions_csv = read_transactions_csv(file_path)
+ print("Транзакции из CSV:")
+ for t in transactions_csv:
+    print(t)
+```
+
+11. read_transactions_xlsx.
+```
+ transactions_xlsx = read_transactions_xlsx(file_path)
+ print("Транзакции из XLSX:")
+ for t in transactions_xlsx:
+    print(t)
 ```
 ## Реализованые декораторы:
 1. log - автоматически регистрирует детали выполнения функций, такие как время вызова, имя функции, передаваемые аргументы, результат выполнения и информацию об ошибках.
