@@ -1,13 +1,20 @@
 import json
-import os
 import logging
+import os
+from pathlib import Path
+
+MODULE_DIR = Path(__file__).resolve().parent
+LOG_DIR = MODULE_DIR.parent / "logs"
+LOG_DIR.mkdir(exist_ok=True)
 
 logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("../logs/utils.log", mode="w")
+log_file = LOG_DIR / "utils.log"
+file_handler = logging.FileHandler(log_file, mode="w")
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(funcName)s: %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
+
 
 def load_json_data(file_path: str) -> list[dict]:
     """
