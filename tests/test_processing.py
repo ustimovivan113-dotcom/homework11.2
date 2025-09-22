@@ -117,7 +117,7 @@ def test_sort_by_date_with_invalid_date_formats():
         {"id": 2, "date": "26/10/2023 10:00"},  # Некорректный формат
         {"id": 3, "date": "2023-10-27T08:00:00.000000"},
     ]
-    with pytest.raises(ValueError, match="time data '26/10/2023 10:00' does not match format '%Y-%m-%dT%H:%M:%S.%f'"):
+    with pytest.raises(ValueError, match="time data '26/10/2023 10:00' does not match format '%d.%m.%Y'"):
         sort_by_date(invalid_format_data)
 
     # Случай с отсутствующим ключом "date"
@@ -132,11 +132,11 @@ def test_sort_by_date_with_invalid_date_formats():
     # Случай с датой, которая не может быть преобразована (например, неполная)
     incomplete_date_data = [
         {"id": 1, "date": "2023-10-26T10:00:00.000000"},
-        {"id": 2, "date": "2023-10-25T12:00:00"},  # Отсутствуют микросекунды
+        {"id": 2, "date": "2023-10"},  # Отсутствуют день
         {"id": 3, "date": "2023-10-27T08:00:00.000000"},
     ]
     with pytest.raises(
-        ValueError, match="time data '2023-10-25T12:00:00' does not match format '%Y-%m-%dT%H:%M:%S.%f'"
+        ValueError, match="time data '2023-10' does not match format '%d.%m.%Y'"
     ):
         sort_by_date(incomplete_date_data)
 

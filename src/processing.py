@@ -1,5 +1,6 @@
 import re
 from collections import Counter
+from src.widget import get_date
 from datetime import datetime
 
 
@@ -23,10 +24,11 @@ def sort_by_date(data: list[dict], is_reverse: bool = True) -> list[dict]:
     """
     Сортирует список словарей по значению ключа 'date'
     """
-
     sorted_by_date_data = sorted(
-        data, key=lambda date: datetime.strptime(date["date"], "%Y-%m-%dT%H:%M:%S.%f"), reverse=is_reverse
-    )
+        data,
+        key=lambda item: datetime.strptime(
+            get_date(item["date"].split('T')[0]), "%d.%m.%Y"
+        ),reverse=is_reverse)
     return sorted_by_date_data
 
 

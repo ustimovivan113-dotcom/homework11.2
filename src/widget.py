@@ -37,18 +37,8 @@ def get_date(date: str) -> str:
     day = date[8:10]
     new_date = day + "." + month + "." + year
 
-    if is_date(new_date):
-        return new_date
-    else:
-        return "Неверный формат даты"
-
-
-def is_date(date_string: str, date_format: str = "%d.%m.%Y") -> bool:
-    """
-    Проверяет, является ли строка допустимой датой по заданному формату.
-    """
     try:
-        datetime.strptime(date_string, date_format)
-        return True
+        datetime.strptime(new_date, "%d.%m.%Y")
+        return new_date
     except ValueError:
-        return False
+        return date

@@ -1,4 +1,7 @@
-from src.processing import filter_by_state
+from pyexpat.errors import messages
+
+from src.processing import filter_by_state, sort_by_date, process_bank_search
+from src.generators import filter_by_currency
 from src.utils import load_json_data, read_transactions_csv,read_transactions_xlsx
 
 
@@ -50,6 +53,37 @@ def state_approve() -> str:
             print(f"Статус операции \"{user_choice}\" недоступен")
 
 
+def yes_or_not_approve(question:str) -> bool:
+    """
+    Функция для проверки корректности ответа на вопросы типа Да/Нет
+    """
+    messages = question
+    while True:
+        print(messages)
+        user_message = input()
+        if user_message.upper() == "ДА":
+            return True
+        if user_message.upper() == "НЕТ":
+            return False
+        else:
+            print(f"Ваш ответ \"{user_message}\" некоректен")
+
+def is_reverse()->bool:
+    """
+    Функция для провреки сортировки по убыванию или возростанию
+    """
+    messages = "Отсортировать по возрастанию или по убыванию?"
+    print(messages)
+    while True:
+        user_message = input()
+        if "УБЫВ" in user_message.upper():
+            return True
+        if "ВОЗРА" in user_message.upper():
+            return False
+        else:
+            print(f"Ваш ответ \"{user_message}\" некоректен")
+            print("Введите по возрастанию/по убыванию")
+
 
 
 def main():
@@ -77,11 +111,20 @@ def main():
 
     data = filter_by_state(data, state)
 
+    if yes_or_not_approve("Отсортировать операции по дате? Да/Нет"):
+        revers_date = is_reverse()
+        data = sort_by_date(data, revers_date)
+    if yes_or_not_approve("Выводить только рублевые транзакции? Да/Нет"):
+        data = filter_by_currency(data, "RUB")
+    if yes_or_not_approve("Отфильтровать список транзакций по определенному слову в описании? Да/Нет"):
+        print("Введите слово:")
+        user_input = input()
+        data = process_bank_search(data, user_input)
 
-
-
-
-
+    print("Распечатываю итоговый список транзакций...")
+    print(data)
+    # if data.count() > 0:
+    #     print(f"Всего банковских операций в выборке:data.count()")
 
 
 
