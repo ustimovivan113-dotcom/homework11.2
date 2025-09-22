@@ -2,6 +2,9 @@ import json
 import logging
 import os
 from pathlib import Path
+from typing import Dict, List
+
+import pandas as pd
 
 MODULE_DIR = Path(__file__).resolve().parent
 LOG_DIR = MODULE_DIR.parent / "logs"
@@ -42,3 +45,19 @@ def load_json_data(file_path: str) -> list[dict]:
     except (json.JSONDecodeError, FileNotFoundError, PermissionError, OSError):
         logger.error("Incorrect data")
         return []
+
+
+def read_transactions_csv(file_path: str) -> List[Dict]:
+    """
+    Функция для считывания финансовых операций из CSV
+    """
+    csv_data = pd.read_csv(file_path, sep=";")
+    return csv_data.to_dict(orient="records")
+
+
+def read_transactions_xlsx(file_path: str) -> List[Dict]:
+    """
+    Функция для считывания финансовых операций из Excel
+    """
+    xlsx_data = pd.read_excel(file_path)
+    return xlsx_data.to_dict(orient="records")
