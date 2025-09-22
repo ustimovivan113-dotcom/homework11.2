@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from datetime import datetime
 
 
@@ -42,4 +43,22 @@ def process_bank_search(data: list[dict], search: str) -> list[dict]:
         desc = str(operation.get("description", ""))
         if pattern.search(desc):
             result.append(operation)
+    return result
+
+
+def process_bank_operations(data: list[dict], categories: list = "") -> dict:
+    """
+    принимать список словарей с данными о банковских операциях и
+    список категорий операций, а возвращать словарь, в котором ключи
+    — это названия категорий, а значения — это количество операций
+    в каждой категории
+    """
+    categories_from_data = []
+
+    for operation in data:
+        desc = str(operation.get("description", ""))
+        if desc in categories:
+            categories_from_data.append(desc)
+
+    result = Counter(categories_from_data)
     return result
