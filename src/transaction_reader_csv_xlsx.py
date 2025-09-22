@@ -7,7 +7,7 @@ def read_transactions_csv(file_path: str) -> List[Dict]:
     """
     Функция для считывания финансовых операций из CSV
     """
-    csv_data = pd.read_csv(file_path)
+    csv_data = pd.read_csv(file_path, sep=";")
     return csv_data.to_dict(orient="records")
 
 
