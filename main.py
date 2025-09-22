@@ -115,7 +115,8 @@ def main():
         revers_date = is_reverse()
         data = sort_by_date(data, revers_date)
     if yes_or_not_approve("Выводить только рублевые транзакции? Да/Нет"):
-        data = filter_by_currency(data, "RUB")
+        iterator_result = filter_by_currency(data, "RUB")
+        data = list(iterator_result)
     if yes_or_not_approve("Отфильтровать список транзакций по определенному слову в описании? Да/Нет"):
         print("Введите слово:")
         user_input = input()
