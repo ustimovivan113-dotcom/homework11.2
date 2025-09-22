@@ -3,7 +3,7 @@ from pyexpat.errors import messages
 from src.processing import filter_by_state, sort_by_date, process_bank_search
 from src.generators import filter_by_currency
 from src.utils import load_json_data, read_transactions_csv,read_transactions_xlsx
-
+from src.widget import get_date
 
 list_data_filepath = {1: "data/operations.json",
                       2: "data/transactions.csv",
@@ -86,6 +86,15 @@ def is_reverse()->bool:
 
 
 
+def response_layout(operation:dict):
+    """
+    Функция для компановки ответа
+    """
+    date = get_date(operation.get("date"))
+    description = operation.get("description")
+    print(f"{date} {description}")
+
+
 def main():
     """
     Функция которая отвечает за основную логику проекта и связывает функциональности между собой.
@@ -123,16 +132,10 @@ def main():
         data = process_bank_search(data, user_input)
 
     print("Распечатываю итоговый список транзакций...")
-    print(data)
-    # if data.count() > 0:
-    #     print(f"Всего банковских операций в выборке:data.count()")
-
-
-
-
-
-
-
+    if len(data) > 0:
+        print(f"Всего банковских операций в выборке: {len(data)}")
+        for operation in data:
+            response_layout(operation)
 
 main()
 
