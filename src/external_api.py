@@ -1,42 +1,40 @@
+import logging
 import requests
-from dotenv import load_dotenv
-import os
-from typing import Dict, Any
 
-load_dotenv()
+logging.basicConfig(
+    filename="logs/external_api.log",
+    filemode="w",
+    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+    level=logging.DEBUG,
+)
+logger = logging.getLogger("external_api")
 
-API_KEY = os.getenv('EXCHANGE_API_KEY')
-BASE_URL = 'https://api.apilayer.com/exchangerates_data/convert'
 
-def convert_to_rub(transaction: Dict[str, Any]) -> float:
-    """
-    Конвертирует сумму транзакции в RUB.
-    Если валюта RUB — возвращает amount.
-    Если USD/EUR — конвертирует через API.
-    """
-    amount = float(transaction.get('operationAmount', {}).get('amount', '0'))
-    currency = transaction.get('operationAmount', {}).get('currency', {}).get('code', 'RUB')
-
-    if currency == 'RUB':
-        return amount
-
-    if currency not in ['USD', 'EUR']:
-        raise ValueError(f"Unsupported currency: {currency}")
-
-    if not API_KEY:
-        raise ValueError("API key not provided in .env")
-
-    headers = {"apikey": API_KEY}
-    params = {
-        'to': 'RUB',
-        'from': currency,
-        'amount': amount
-    }
-
+def convert_to_rub(amount: float, currency: str) -> float:
+    logger.info(f"Вызвана функция convert_to_rub с аргументами amount={amount}, currency={currency}")
     try:
-        response = requests.get(BASE_URL, headers=headers, params=params)
+        if currency == "USD":
+            response = requests.get("https://api.exchangerate-api.com/v4/latest/USD")
+            response.raise_for_status()
+            rate = response.json()["rates"]["RUB"]
+            result = amount * rate
+        else:
+            result = amount
+        logger.info(f"Результат конвертации: {result} RUB")
+        return result
+    except Exception as e:
+        logger.error(f"Ошибка в convert_to_rub: {str(e)}")
+        raise
+
+
+def get_currency_rate(currency: str) -> float:
+    logger.info(f"Вызвана функция get_currency_rate с аргументом currency={currency}")
+    try:
+        response = requests.get(f"https://api.exchangerate-api.com/v4/latest/{currency}")
         response.raise_for_status()
-        data = response.json()
-        return float(data['result'])
-    except requests.RequestException as e:
-        raise ValueError(f"API request failed: {str(e)}")
+        rate = response.json()["rates"]["RUB"]
+        logger.info(f"Курс {currency} к RUB: {rate}")
+        return rate
+    except Exception as e:
+        logger.error(f"Ошибка в get_currency_rate: {str(e)}")
+        raise

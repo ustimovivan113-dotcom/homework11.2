@@ -1,77 +1,40 @@
 import pytest
-
-from masks import get_mask_account, get_mask_card_number
-
-
-@pytest.fixture
-def card_number() -> int:
-    return 1111222233334444
+from masks import get_mask_card_number, get_mask_account
 
 
-@pytest.mark.parametrize("expected", ["1111 22** **** 4444"])
-def test_get_mask_card_number(card_number: int, expected: str) -> None:
-    """
-    Тест маски номера карты
-    """
-    assert get_mask_card_number(card_number) == expected
+def test_get_mask_card_number():
+    assert get_mask_card_number("7000792289606361") == "7000 79** **** 6361"
 
 
-def test_get_mask_card_number_long_length() -> None:
-    """
-    Тест маски номера карты (длинный номер)
-    """
+def test_get_mask_card_number_long_length():
     with pytest.raises(ValueError):
-        get_mask_card_number(11112222333344445555)
+        get_mask_card_number("7000792289606361111")
 
 
-def test_get_mask_card_number_small_length() -> None:
-    """
-    Тест маски номера карты (короткий номер)
-    """
+def test_get_mask_card_number_small_length():
     with pytest.raises(ValueError):
-        get_mask_card_number(111122223333)
+        get_mask_card_number("700079228960")
 
 
-def test_get_mask_card_number_empty_length() -> None:
-    """
-    Тест маски номера карты (пустой номер)
-    """
+def test_get_mask_card_number_empty_length():
     with pytest.raises(ValueError):
-        get_mask_card_number(0)
+        get_mask_card_number("")
 
 
-@pytest.fixture
-def account_number() -> int:
-    return 11112222333344445555
+def test_get_mask_account():
+    assert get_mask_account("73654108430135874305") == "**4305"
 
 
-@pytest.mark.parametrize("expected", ["**5555"])
-def test_get_mask_account(account_number: int, expected: str) -> None:
-    """
-    Тест маски номера счёта
-    """
-    assert get_mask_account(account_number) == expected
-
-
-def test_get_mask_account_long_length() -> None:
-    """
-    Тест маски номера счёта (длинный номер)
-    """
+def test_get_mask_account_long_length():
     with pytest.raises(ValueError):
-        get_mask_account(111122223333444455556666)
+        get_mask_account("736541084301358743051111")
 
 
-def test_get_mask_account_small_length() -> None:
-    """
-    Тест маски номера счёта (короткий номер)
-    """
+def test_get_mask_account_small_length():
     with pytest.raises(ValueError):
-        get_mask_account(1111222233334444)
+        get_mask_account("123")
 
 
-def test_get_mask_account_empty_length() -> None:
-    """
-    Тест маски номера счёта (пустой номер)
-    """
+def test_get_mask_account_empty_length():
     with pytest.raises(ValueError):
-        get_mask_account(0)
+        get_mask_account("")

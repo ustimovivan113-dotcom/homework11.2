@@ -9,6 +9,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger('masks')
 
+
 def get_mask_card_number(card_number: str) -> str:
     logger.info(f"Вызвана функция get_mask_card_number с аргументом: {card_number}")
     try:
@@ -21,6 +22,7 @@ def get_mask_card_number(card_number: str) -> str:
         logger.error(f"Ошибка в get_mask_card_number: {str(e)}")
         raise
 
+
 def get_mask_account(account_number: str) -> str:
     logger.info(f"Вызвана функция get_mask_account с аргументом: {account_number}")
     try:
@@ -32,6 +34,7 @@ def get_mask_account(account_number: str) -> str:
     except Exception as e:
         logger.error(f"Ошибка: {str(e)}")
         raise
+
 
 def mask_account_card(input_str: str) -> str:
     logger.info(f"Вызвана функция mask_account_card с аргументом: {input_str}")

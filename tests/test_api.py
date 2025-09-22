@@ -1,8 +1,11 @@
 from src.external_api import convert_to_rub
-transaction = {
-    "operationAmount": {
-        "amount": "100.00",
-        "currency": {"code": "USD"}
-    }
-}
-print(convert_to_rub(transaction))  # Должен вывести ~amount в RUB
+
+
+def test_convert_to_rub_usd():
+    result = convert_to_rub(100, "USD")
+    assert isinstance(result, float)
+    assert result > 0
+
+
+def test_convert_to_rub_rub():
+    assert convert_to_rub(100, "RUB") == 100

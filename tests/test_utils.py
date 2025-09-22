@@ -1,25 +1,22 @@
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+import pytest
+from utils import get_date, load_transactions
 
-import json
-from utils import load_transactions
 
-def test_load_transactions_valid(tmp_path):
-    file = tmp_path / "test.json"
-    data = [{"id": 1, "operationAmount": {"amount": "100.00", "currency": {"code": "USD"}}}]
-    file.write_text(json.dumps(data), encoding='utf-8')
-    assert load_transactions(str(file)) == data
+def test_get_date():
+    assert get_date("2024-03-11T02:26:18.671407") == "11.03.2024"
 
-def test_load_transactions_empty_file(tmp_path):
-    file = tmp_path / "test.json"
-    file.write_text("", encoding='utf-8')
-    assert load_transactions(str(file)) == []
 
-def test_load_transactions_not_list(tmp_path):
-    file = tmp_path / "test.json"
-    file.write_text(json.dumps({"id": 1}), encoding='utf-8')
-    assert load_transactions(str(file)) == []
+def test_load_transactions():
+    transactions = load_transactions("data/operations.json")
+    assert isinstance(transactions, list)
+    assert len(transactions) > 0
 
-def test_load_transactions_not_found():
-    assert load_transactions("nonexistent.json") == []
+
+def test_load_transactions_error():
+    with pytest.raises(FileNotFoundError):
+        load_transactions("nonexistent.json")
+
+
+def test_get_date_error():
+    with pytest.raises(ValueError):
+        get_date("invalid_date")
