@@ -1,7 +1,8 @@
 import re
 from collections import Counter
-from src.widget import get_date
 from datetime import datetime
+
+from src.widget import get_date
 
 
 def filter_by_state(data: list[dict], state: str = "EXECUTED") -> list[dict]:
@@ -25,10 +26,8 @@ def sort_by_date(data: list[dict], is_reverse: bool = True) -> list[dict]:
     Сортирует список словарей по значению ключа 'date'
     """
     sorted_by_date_data = sorted(
-        data,
-        key=lambda item: datetime.strptime(
-            get_date(item["date"].split('T')[0]), "%d.%m.%Y"
-        ),reverse=is_reverse)
+        data, key=lambda item: datetime.strptime(get_date(item["date"].split("T")[0]), "%d.%m.%Y"), reverse=is_reverse
+    )
     return sorted_by_date_data
 
 

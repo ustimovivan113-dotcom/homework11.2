@@ -135,9 +135,7 @@ def test_sort_by_date_with_invalid_date_formats():
         {"id": 2, "date": "2023-10"},  # Отсутствуют день
         {"id": 3, "date": "2023-10-27T08:00:00.000000"},
     ]
-    with pytest.raises(
-        ValueError, match="time data '2023-10' does not match format '%d.%m.%Y'"
-    ):
+    with pytest.raises(ValueError, match="time data '2023-10' does not match format '%d.%m.%Y'"):
         sort_by_date(incomplete_date_data)
 
     # Случай с пустым списком

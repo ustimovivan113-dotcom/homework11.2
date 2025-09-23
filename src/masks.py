@@ -23,9 +23,6 @@ def get_mask_card_number(card_number: int) -> str:
         logger.warning(f"Card number: {card_number} is stroke")
 
     card_number_str = str(card_number)
-    if len(card_number_str) != 16:
-        logger.error("Error")
-        raise ValueError("Неверная длина номера")
 
     logger.info(f"A mask is created for the card number. {card_number}")
     card_mask = card_number_str[:6] + "******" + card_number_str[-4:]
@@ -40,10 +37,6 @@ def get_mask_account(account_number: int) -> str:
     if isinstance(account_number, str):
         logger.warning(f"Account number: {account_number} is stroke")
     account_number_str = str(account_number)
-
-    if len(account_number_str) != 20:
-        logger.error("Error")
-        raise ValueError("Неверная длина номера")
 
     logger.info(f"A mask is created for the account number. {account_number}")
     mask_account = "**" + account_number_str[-4:]
