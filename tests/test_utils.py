@@ -1,5 +1,5 @@
 import pytest
-from utils import get_date, load_transactions
+from src.utils import get_date, load_transactions
 
 
 def test_get_date():

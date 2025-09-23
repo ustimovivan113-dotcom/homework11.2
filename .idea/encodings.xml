@@ -3,6 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/test_api.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test_decorators.py" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/test_requests.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test_requests.py" charset="UTF-8" />
   </component>
 </project>
