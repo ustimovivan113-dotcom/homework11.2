@@ -23,17 +23,17 @@ def get_mask_card_number(card_number: str) -> str:
         raise
 
 
-def get_mask_account(account_number: str) -> str:
-    logger.info(f"Вызвана функция get_mask_account с аргументом: {account_number}")
-    try:
-        if len(account_number) < 4:
-            raise ValueError("Неверный номер счёта")
-        masked = f"**{account_number[-4:]}"
-        logger.info(f"Результат: {masked}")
-        return masked
-    except Exception as e:
-        logger.error(f"Ошибка: {str(e)}")
-        raise
+def get_mask_account(account: str) -> str:
+    """
+    Маскирует номер счёта: показывает последние 4 цифры.
+    """
+    if not isinstance(account, str) or not account.isdigit():
+        raise ValueError("Account number must be a string of digits")
+    if len(account) < 4:
+        return account
+    if len(account) > 20:
+        raise ValueError("Account number is too long")
+    return f"**{account[-4:]}"
 
 
 def mask_account_card(input_str: str) -> str:

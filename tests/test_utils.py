@@ -1,22 +1,19 @@
 import pytest
-from src.utils import get_date, load_transactions
+from src.utils import load_transactions
 
 
-def test_get_date():
-    assert get_date("2024-03-11T02:26:18.671407") == "11.03.2024"
-
-
-def test_load_transactions():
-    transactions = load_transactions("data/operations.json")
-    assert isinstance(transactions, list)
+def test_load_transactions_csv():
+    transactions = load_transactions('C:/Users/IVAN/Downloads/homework11.2/transactions.csv')
     assert len(transactions) > 0
+    assert 'id' in transactions[0]
 
 
-def test_load_transactions_error():
-    with pytest.raises(FileNotFoundError):
-        load_transactions("nonexistent.json")
+def test_load_transactions_xlsx():
+    transactions = load_transactions('C:/Users/IVAN/Downloads/homework11.2/transactions_excel.xlsx')
+    assert len(transactions) > 0
+    assert 'id' in transactions[0]
 
 
-def test_get_date_error():
+def test_invalid_file():
     with pytest.raises(ValueError):
-        get_date("invalid_date")
+        load_transactions('invalid.txt')

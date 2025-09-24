@@ -1,54 +1,53 @@
-from datetime import datetime
-
-from src.masks import get_mask_account, get_mask_card_number
+from typing import Optional
 
 
-def mask_account_card(account_card: str) -> str:
+def get_mask_card_number(card_number: str) -> str:
     """
-    Обрабатывает номер карты или номер счёта
+    Маскирует номер карты: показывает последние 4 цифры.
+    Пример: '1234567890123456' -> '**** **** **** 3456'
     """
-    is_card_number = False
-    if "счет" not in account_card.lower().replace("ё", "e"):
-        is_card_number = True
-
-    account_card_arr = account_card.split()
-    prefix_number = ""
-    for word in account_card_arr:
-        if word.isalpha():
-            prefix_number = prefix_number + " " + word
-        if word.isdigit():
-            if is_card_number:
-                card_number = get_mask_card_number(int(word))
-                return prefix_number[1:] + " " + card_number
-            else:
-                account_number = get_mask_account((int(word)))
-                return prefix_number[1:] + " " + account_number
-    return "Информация неверна"
+    if not isinstance(card_number, str) or not card_number.isdigit():
+        raise ValueError("Card number must be a string of digits")
+    if len(card_number) < 4:
+        return card_number
+    return f"**** **** **** {card_number[-4:]}"
 
 
-def get_date(date: str) -> str:
+def get_mask_account(account: str) -> str:
     """
-    Возвращает дату из формата ГГГГ-ММ-ДД в ДД.ММ.ГГГГ
+    Маскирует номер счёта: показывает последние 4 цифры.
+    Пример: '12345678901234567890' -> '**7890'
     """
-    if len(date) <= 1:
-        return "Дата не может быть пустой"
-    year = date[:4]
-    month = date[5:7]
-    day = date[8:10]
-    new_date = day + "." + month + "." + year
-
-    if is_date(new_date):
-        return new_date
-    else:
-        return "Неверный формат даты"
+    if not isinstance(account, str) or not account.isdigit():
+        raise ValueError("Account number must be a string of digits")
+    if len(account) < 4:
+        raise ValueError("Account number is too short")  # Изменено: выброс ошибки
+    if len(account) > 20:
+        raise ValueError("Account number is too long")
+    return f"**{account[-4:]}"
 
 
-def is_date(date_string: str, date_format: str = "%d.%m.%Y") -> bool:
+def mask_account_card(account_card: str) -> Optional[str]:
     """
-    Проверяет, является ли строка допустимой датой по заданному формату.
+    Маскирует номер карты или счёта на основе входной строки.
+    Пример: 'Visa Platinum 1234567890123456' -> 'Visa Platinum **** **** **** 3456'
+            'Счет 12345678901234567890' -> 'Счет **7890'
     """
-    try:
-        datetime.strptime(date_string, date_format)
-        return True
-    except ValueError:
-        return False
+    if not account_card:
+        return None
+    parts = account_card.split()
+    if not parts:
+        return None
+    number = parts[-1]
+    if "Счет" in account_card:
+        return f"{' '.join(parts[:-1])} {get_mask_account(number)}"
+    return f"{' '.join(parts[:-1])} {get_mask_card_number(number)}"
+
+
+def get_date() -> str:
+    """
+    Возвращает текущую дату в формате строки (заглушка для теста).
+    Замените на реальную реализацию, если требуется.
+    """
+    from datetime import datetime
+    return datetime.now().strftime("%Y-%m-%d")

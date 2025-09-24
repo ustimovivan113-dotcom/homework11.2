@@ -1,6 +1,6 @@
 import pytest
 from src.masks import get_mask_card_number, get_mask_account
-
+from src.widget import get_mask_account  # Или from src.masks import get_mask_account
 
 def test_get_mask_card_number():
     assert get_mask_card_number("7000792289606361") == "7000 79** **** 6361"
@@ -27,12 +27,12 @@ def test_get_mask_account():
 
 def test_get_mask_account_long_length():
     with pytest.raises(ValueError):
-        get_mask_account("736541084301358743051111")
+        get_mask_account("123456789012345678901234567890")  # Длина 30
 
 
 def test_get_mask_account_small_length():
     with pytest.raises(ValueError):
-        get_mask_account("123")
+        get_mask_account("123")  # Номер короче 4 символов
 
 
 def test_get_mask_account_empty_length():

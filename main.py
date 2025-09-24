@@ -1,10 +1,14 @@
-from src.masks import get_mask_card_number, get_mask_account, mask_account_card
-from src.utils import get_date
+from src.utils import load_transactions
+from src.widget import mask_account_card, get_date
 
-# Тест masks
-print(get_mask_card_number('7000792289606361'))
-print(get_mask_account('73654108430135874305'))
-print(mask_account_card('Visa Platinum 7000792289606361'))
-
-# Тест utils
-print(get_date('2024-03-11T02:26:18.671407'))
+if __name__ == "__main__":
+    try:
+        csv_data = load_transactions('C:/Users/IVAN/Downloads/homework11.2/transactions.csv')
+        print(f"CSV загружено: {len(csv_data)} транзакций")
+        xlsx_data = load_transactions('C:/Users/IVAN/Downloads/homework11.2/transactions_excel.xlsx')
+        print(f"XLSX загружено: {len(xlsx_data)} транзакций")
+        print(mask_account_card("Visa Platinum 1234567890123456"))
+        print(mask_account_card("Счет 12345678901234567890"))
+        print(f"Дата: {get_date()}")
+    except Exception as e:
+        print(f"Ошибка: {e}")
