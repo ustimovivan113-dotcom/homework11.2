@@ -1,5 +1,5 @@
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
 
 def get_mask_card_number(card_number: str) -> str:
