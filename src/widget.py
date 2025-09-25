@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 
 
 def get_mask_card_number(card_number: str) -> str:
@@ -27,27 +28,34 @@ def get_mask_account(account: str) -> str:
     return f"**{account[-4:]}"
 
 
-def mask_account_card(account_card: str) -> Optional[str]:
-    """
-    Маскирует номер карты или счёта на основе входной строки.
-    Пример: 'Visa Platinum 1234567890123456' -> 'Visa Platinum **** **** **** 3456'
-            'Счет 12345678901234567890' -> 'Счет **7890'
-    """
-    if not account_card:
-        return None
-    parts = account_card.split()
-    if not parts:
-        return None
-    number = parts[-1]
-    if "Счет" in account_card:
-        return f"{' '.join(parts[:-1])} {get_mask_account(number)}"
-    return f"{' '.join(parts[:-1])} {get_mask_card_number(number)}"
+def mask_account_card(card_or_account: str) -> str:
+    if not card_or_account:
+        return "Информация неверна"
+    if card_or_account.startswith("Счет"):
+        account_number = card_or_account.split()[-1]
+        if len(account_number) < 4:
+            raise ValueError("Account number must be at least 4 characters long")
+        if len(account_number) > 20:
+            raise ValueError("Account number must not exceed 20 characters")
+        return "Счет **" + account_number[-4:]
+    # Для карт
+    card_type, card_number = card_or_account.rsplit(" ", 1)
+    if len(card_number) != 16:
+        raise ValueError("Card number must be 16 digits long")
+    return f"{card_type} {card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
 
 
-def get_date() -> str:
-    """
-    Возвращает текущую дату в формате строки (заглушка для теста).
-    Замените на реальную реализацию, если требуется.
-    """
-    from datetime import datetime
-    return datetime.now().strftime("%Y-%m-%d")
+def get_date(date_str: str) -> str:
+    if not date_str:
+        return "Дата не может быть пустой"
+    try:
+        # Пробуем разные форматы даты
+        for fmt in ["%Y-%m-%dT%H:%M:%S.%f", "%Y/%m/%d", "%Y.%m.%d"]:
+            try:
+                parsed_date = datetime.strptime(date_str, fmt)
+                return parsed_date.strftime("%d.%m.%Y")
+            except ValueError:
+                continue
+        return "Неверный формат даты"
+    except Exception:
+        return "Неверный формат даты"

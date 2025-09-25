@@ -24,16 +24,11 @@ def get_mask_card_number(card_number: str) -> str:
 
 
 def get_mask_account(account: str) -> str:
-    """
-    Маскирует номер счёта: показывает последние 4 цифры.
-    """
-    if not isinstance(account, str) or not account.isdigit():
-        raise ValueError("Account number must be a string of digits")
     if len(account) < 4:
-        return account
+        raise ValueError("Account number must be at least 4 characters long")
     if len(account) > 20:
-        raise ValueError("Account number is too long")
-    return f"**{account[-4:]}"
+        raise ValueError("Account number must not exceed 20 characters")
+    return "**" + account[-4:]
 
 
 def mask_account_card(input_str: str) -> str:

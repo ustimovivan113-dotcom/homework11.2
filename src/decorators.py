@@ -1,6 +1,6 @@
-import functools
 import datetime
-from typing import Callable, TypeVar, Any
+import functools
+from typing import Any, Callable, TypeVar
 
 T = TypeVar('T')
 

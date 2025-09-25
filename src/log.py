@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Any
+from typing import Any, Callable
 
 # Устанавливаем уровень логирования DEBUG для всех логгеров
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
