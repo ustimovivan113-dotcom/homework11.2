@@ -4,10 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Timur Gorashchenko <timyr98239718@mail.ru>"]
 readme = "README.md"
+package-mode = false  # Отключаем установку как пакета
 
 [tool.poetry.dependencies]
 python = "^3.13"
-
+pandas = "^2.3.2"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^7.3.0"
@@ -15,9 +17,8 @@ black = "^25.1.0"
 isort = "^6.0.1"
 mypy = "^1.17.1"
 
-
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.4.1"
+pytest = "^8.4.2"
 pytest-cov = "^6.2.1"
 
 [build-system]
@@ -34,25 +35,21 @@ exclude = [
 ]
 
 [tool.black]
-# Максимальная длина строки
 line-length = 119
-# Файлы, которые не нужно форматировать
 exclude = '''
 (
   /(
-      \.eggs         # Исключить несколько общих каталогов
-    | \.git          # в корне проекта
+      \.eggs
+    | \.git
     | \.hg
     | \.mypy_cache
     | \.tox
     | \.venv
     | dist
   )/
-  | foo.py           # Также отдельно исключить файл с именем foo.py
-                     # в корне проекта
+  | foo.py
 )
 '''
 
 [tool.isort]
 line_length = 119
-

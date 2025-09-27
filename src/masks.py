@@ -1,24 +1,48 @@
-def get_mask_card_number(card_number: int) -> str:
-    """
-    Возвращает маску номера карты в формате XXXX XX** **** XXXX
-    """
-    card_number_str = str(card_number)
-    if len(card_number_str) != 16:
-        raise ValueError("Неверная длина номера")
+import logging
 
-    card_mask = card_number_str[:6] + "******" + card_number_str[-4:]
-    card_mask = " ".join(card_mask[i : i + 4] for i in range(0, len(card_mask), 4))
-    return card_mask
+# Настройка логирования
+logging.basicConfig(
+    filename='../logs/masks.log',
+    filemode='w',
+    format='%(asctime)s [%(name)s] %(levelname)s: %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger('masks')
 
 
-def get_mask_account(account_number: int) -> str:
-    """
-    Возвращает маску номера аккаунта в формате **XXXX
-    """
-    account_number_str = str(account_number)
+def get_mask_card_number(card_number: str) -> str:
+    logger.info(f"Вызвана функция get_mask_card_number с аргументом: {card_number}")
+    try:
+        if len(card_number) != 16 or not card_number.isdigit():
+            raise ValueError("Неверный номер карты")
+        masked = f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
+        logger.info(f"Результат: {masked}")
+        return masked
+    except Exception as e:
+        logger.error(f"Ошибка в get_mask_card_number: {str(e)}")
+        raise
 
-    if len(account_number_str) != 20:
-        raise ValueError("Неверная длина номера")
 
-    mask_account = "**" + account_number_str[-4:]
-    return mask_account
+def get_mask_account(account: str) -> str:
+    if len(account) < 4:
+        raise ValueError("Account number must be at least 4 characters long")
+    if len(account) > 20:
+        raise ValueError("Account number must not exceed 20 characters")
+    return "**" + account[-4:]
+
+
+def mask_account_card(input_str: str) -> str:
+    logger.info(f"Вызвана функция mask_account_card с аргументом: {input_str}")
+    try:
+        parts = input_str.split()
+        if "Счет" in input_str:
+            account_number = parts[-1]
+            masked = f"Счет {get_mask_account(account_number)}"
+        else:
+            card_number = parts[-1]
+            masked = f"{' '.join(parts[:-1])} {get_mask_card_number(card_number)}"
+        logger.info(f"Результат: {masked}")
+        return masked
+    except Exception as e:
+        logger.error(f"Ошибка: {str(e)}")
+        raise

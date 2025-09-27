@@ -1,0 +1,15 @@
+import pytest
+import requests
+
+
+def test_requests_get():
+    response = requests.get("https://api.exchangerate-api.com/v4/latest/USD")
+    assert response.status_code == 200
+
+
+def test_requests_error(monkeypatch):
+    def mock_get(*args, **kwargs):
+        raise requests.RequestException("API error")
+    monkeypatch.setattr(requests, "get", mock_get)
+    with pytest.raises(requests.RequestException):
+        requests.get("https://api.exchangerate-api.com/v4/latest/USD")
