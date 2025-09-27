@@ -35,6 +35,12 @@ git clone https://github.com/ZloyKINDER/Educational_Bank.git
 
 11. read_transactions_xlsx - Cчитывания финансовые операций из XLSX и выдает список словарей с транзакциями.
 
+12. process_bank_search - Фильтрует список банковских операций, оставляя только те, в описании которых содержится указанная строка поиска.
+
+13. process_bank_operations - Возвращает словарь, в котором ключи — это названия категорий, а значения — это количество операций в каждой категории
+
+14. load_json_data - Возвращает данные о финансовых транзакция из JSON
+
 ## Примеры использования:
 
 1. get_mask_card_number
@@ -191,6 +197,54 @@ for card_number in card_number_generator(1, 5):
  for t in transactions_xlsx:
     print(t)
 ```
+12. process_bank_search.
+```
+bank_operations = [
+    {"description": "Покупка в магазине Пятерочка", "amount": 1500, "date": "2024-01-15"},
+    {"description": "Оплата услуг ЖКХ", "amount": 3500, "date": "2024-01-16"},
+    {"description": "Перевод с карты на карту", "amount": 5000, "date": "2024-01-17"},
+    {"description": "ПЯТЕРОЧКА супермаркет", "amount": 890, "date": "2024-01-18"},
+    {"description": "Кафе Starbucks", "amount": 1200, "date": "2024-01-19"},
+    {"description": "Аптека №1", "amount": 650, "date": "2024-01-20"},
+]
+
+result = process_bank_search(bank_operations, "Пятерочка")
+print("Операции в Пятерочке:")
+for operation in result:
+    print(f"- {operation['description']}: {operation['amount']} руб.")
+    
+```
+
+13. process_bank_operations.
+```
+bank_operations = [
+    {"description": "Супермаркет", "amount": 1500, "date": "2024-01-15"},
+    {"description": "Аптека", "amount": 650, "date": "2024-01-16"},
+    {"description": "Супермаркет", "amount": 2300, "date": "2024-01-17"},
+    {"description": "Кафе", "amount": 1200, "date": "2024-01-18"},
+    {"description": "Транспорт", "amount": 400, "date": "2024-01-19"},
+    {"description": "Супермаркет", "amount": 890, "date": "2024-01-20"},
+    {"description": "Аптека", "amount": 320, "date": "2024-01-21"},
+    {"description": "Интернет", "amount": 500, "date": "2024-01-22"},
+]
+categories = ["Супермаркет", "Аптека", "Кафе", "Транспорт"]
+result = process_bank_operations(bank_operations, categories)
+
+print("Статистика операций по категориям:")
+for category, count in result.items():
+    print(f"- {category}: {count} операций")
+```
+
+14. load_json_data.
+```
+file_path = "bank_operations.json"
+transactions = load_json_data(file_path)
+
+print(f"Загружено операций: {len(transactions)}")
+for i, transaction in enumerate(transactions[:3], 1):
+    print(f"{i}. {transaction}")
+```
+
 ## Реализованые декораторы:
 1. log - автоматически регистрирует детали выполнения функций, такие как время вызова, имя функции, передаваемые аргументы, результат выполнения и информацию об ошибках.
 ```
@@ -213,3 +267,7 @@ my_function(1, 2)
 4. test_generators - Тестировани для модуля generators.
 
 5. test_decorators - Тестирование для модуля decorators.
+
+6. test_external_api - Тестирование для модуля external_api.
+
+7. test_utils - Тестирование для модуля utils.

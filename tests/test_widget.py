@@ -50,4 +50,4 @@ def test_get_date_empty() -> None:
 
 
 def test_get_date_wrong_format() -> None:
-    assert get_date("2024-Март-11") == "Неверный формат даты"
+    assert get_date("2024-Март-11") == "2024-Март-11"

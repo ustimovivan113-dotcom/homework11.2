@@ -1,4 +1,8 @@
+import re
+from collections import Counter
 from datetime import datetime
+
+from src.widget import get_date
 
 
 def filter_by_state(data: list[dict], state: str = "EXECUTED") -> list[dict]:
@@ -21,8 +25,41 @@ def sort_by_date(data: list[dict], is_reverse: bool = True) -> list[dict]:
     """
     Сортирует список словарей по значению ключа 'date'
     """
-
     sorted_by_date_data = sorted(
-        data, key=lambda date: datetime.strptime(date["date"], "%Y-%m-%dT%H:%M:%S.%f"), reverse=is_reverse
+        data, key=lambda item: datetime.strptime(get_date(item["date"].split("T")[0]), "%d.%m.%Y"), reverse=is_reverse
     )
     return sorted_by_date_data
+
+
+def process_bank_search(data: list[dict], search: str) -> list[dict]:
+    """
+    Фильтрует список банковских операций, оставляя только те,
+    в описании которых содержится указанная строка поиска.
+    """
+    pattern = re.compile(re.escape(search), re.IGNORECASE)
+
+    result = []
+    for operation in data:
+
+        desc = str(operation.get("description", ""))
+        if pattern.search(desc):
+            result.append(operation)
+    return result
+
+
+def process_bank_operations(data: list[dict], categories: list = "") -> dict:
+    """
+    Принимает список словарей с данными о банковских операциях и
+    список категорий операций, а возвращает словарь, в котором ключи
+    — это названия категорий, а значения — это количество операций
+    в каждой категории
+    """
+    categories_from_data = []
+
+    for operation in data:
+        desc = str(operation.get("description", ""))
+        if desc in categories:
+            categories_from_data.append(desc)
+
+    result = Counter(categories_from_data)
+    return result
