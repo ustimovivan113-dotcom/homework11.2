@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.masks import get_mask_account, get_mask_card_number
 
 
@@ -28,7 +30,15 @@ def get_date(date: str) -> str:
     """
     Возвращает дату из формата ГГГГ-ММ-ДД в ДД.ММ.ГГГГ
     """
+    if len(date) <= 1:
+        return "Дата не может быть пустой"
     year = date[:4]
     month = date[5:7]
     day = date[8:10]
-    return day + "." + month + "." + year
+    new_date = day + "." + month + "." + year
+
+    try:
+        datetime.strptime(new_date, "%d.%m.%Y")
+        return new_date
+    except ValueError:
+        return date
